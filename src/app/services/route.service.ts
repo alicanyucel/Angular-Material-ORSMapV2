@@ -21,7 +21,8 @@ export class RouteService {
       location_type: 'start',
       profile: 'driving-car',
       range: 900, // time in seconds
-      interval: [300] // this number is used to split up the above number into regions
+      interval: [300], // this number is used to split up the above number into regions
+      attributes: ['area', 'total_pop']
     });
     return from(result);
   }

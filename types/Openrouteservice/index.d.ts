@@ -43,25 +43,27 @@ declare namespace Openrouteservice {
     range: number;
     units?: UnitType;
     area_units?: UnitType;
-    attributes?: AttributeType;
+    attributes?: AttributeType[];
   }
 
   interface IsochroneQueryMeta extends IsochroneQueryBase {
     ranges: string;
+    attributes: string;
   }
 
-  interface ResponseMetaData {
+  interface ResponseMeta {
     attribution: string;
     engine: VersionInfo;
     service: 'isochrones';
     query: IsochroneQueryMeta;
+    timestamp: number;
   }
 
   interface IsochroneResponse {
     type: 'FeatureCollection';
     bbox: [number, number, number, number];
     features: GeoJsonFeature[];
-    info: ResponseMetaData;
+    info: ResponseMeta;
   }
 
   class Isochrones {
