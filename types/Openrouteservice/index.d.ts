@@ -7,16 +7,36 @@ declare namespace Openrouteservice {
   type AttributeType = 'area' | 'reachfactor' | 'total_pop';
   type LocationType = 'start' | 'destination';
 
+  interface Geometry {
+    type: 'Polygon';
+    coordinates: number[][];
+  }
+
+  interface VersionInfo {
+    version: string;
+    build_date: string;
+  }
+
   interface ConstructorOptions {
     api_key: string;
     host?: string;
   }
 
-  interface IsochroneSettings extends Partial<ConstructorOptions> {
+  interface GeoJsonFeature {
+    type: 'Feature';
+    properties: Record<string, any>;
+    geometry: Geometry;
+  }
+
+  interface IsochroneQueryBase {
     locations: number[][];
+    location_type: LocationType;
     profile: ProfileType;
-    avoidables?: AvoidableType[];
     range_type: 'time' | 'distance';
+  }
+
+  interface IsochroneSettings extends IsochroneQueryBase, Partial<ConstructorOptions> {
+    avoidables?: AvoidableType[];
     smoothing?: number;
     interval: number[];
     format?: 'geojson';
@@ -24,11 +44,24 @@ declare namespace Openrouteservice {
     units?: UnitType;
     area_units?: UnitType;
     attributes?: AttributeType;
-    location_type: LocationType;
+  }
+
+  interface IsochroneQueryMeta extends IsochroneQueryBase {
+    ranges: string;
+  }
+
+  interface ResponseMetaData {
+    attribution: string;
+    engine: VersionInfo;
+    service: 'isochrones';
+    query: IsochroneQueryMeta;
   }
 
   interface IsochroneResponse {
-
+    type: 'FeatureCollection';
+    bbox: [number, number, number, number];
+    features: GeoJsonFeature[];
+    info: ResponseMetaData;
   }
 
   class Isochrones {

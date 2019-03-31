@@ -1,8 +1,8 @@
-/* tslint:disable:no-reference */
-/// <reference path="../../../types/Openrouteservice/index.d.ts"/>
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { environment } from '../../environments/environment';
+import IsochroneResponse = Openrouteservice.IsochroneResponse;
+import Isochrones = Openrouteservice.Isochrones;
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +11,11 @@ export class RouteService {
 
   constructor() { }
 
-  getIsochrones(): Observable<Openrouteservice.IsochroneResponse> {
-    const isochrones = new Openrouteservice.Isochrones({
+  getIsochrones(): Observable<IsochroneResponse> {
+    const isochrones = new Isochrones({
       api_key: environment.apiKey
     });
-    const result = isochrones.calculate({
+    const result: Promise<IsochroneResponse> = isochrones.calculate({
       range_type: 'time',
       locations: [[-83.4255176, 42.432238]], // these are in long/lat pairs, not lat/long pairs.
       location_type: 'start',

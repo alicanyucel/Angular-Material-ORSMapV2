@@ -1,3 +1,5 @@
+/* tslint:disable:no-reference */
+/// <reference path="../../types/Openrouteservice/index.d.ts"/>
 import { Component } from '@angular/core';
 
 @Component({
