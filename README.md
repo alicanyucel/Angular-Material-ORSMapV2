@@ -1,4 +1,7 @@
-# OpenRouteService
+# OpenRouteService Test Bed
+
+To use this app, go sign up & generate an [OpenRouteService API key](https://openrouteservice.org/dev/#/signup).
+Once you have an API key, put it in the secrets.json file so the application can use it.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.7.
 

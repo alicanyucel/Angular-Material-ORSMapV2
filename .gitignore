@@ -45,4 +45,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Files with stuff I don't want on Github
 secrets.json
