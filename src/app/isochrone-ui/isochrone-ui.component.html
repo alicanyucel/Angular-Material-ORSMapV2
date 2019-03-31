@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-title>
+    Enter Options for Isochrone Search
+  </mat-card-title>
+  <mat-card-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Site Lat/Long</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <br/>
+    <mat-slider min="0" max="60" [thumbLabel]="true"></mat-slider>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary">Get Results</button>
+  </mat-card-actions>
+</mat-card>
