@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RouteService } from '../services/route.service';
-import { take } from 'rxjs/operators';
+import { AppState } from '../state';
+import { Store, select } from '@ngrx/store';
+import { LoadRoutes } from '../state/route/route.actions';
+import { Observable } from 'rxjs';
+import { getIsLoading } from '../state/route/route.selectors';
 
 @Component({
   selector: 'app-isochrone-ui',
@@ -9,15 +12,15 @@ import { take } from 'rxjs/operators';
 })
 export class IsochroneUiComponent implements OnInit {
 
-  constructor(private routeService: RouteService) { }
+  routeIsLoading$: Observable<boolean>;
+
+  constructor(private store$: Store<AppState>) { }
 
   ngOnInit() {
+    this.routeIsLoading$ = this.store$.pipe(select(getIsLoading));
   }
 
   getResults() {
-    this.routeService.getIsochrones().pipe(take(1)).subscribe(
-      response => console.log('response', response),
-      err => console.error('Error', err)
-    );
+    this.store$.dispatch(new LoadRoutes());
   }
 }
