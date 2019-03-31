@@ -33,9 +33,7 @@ export function routeReducer(state = initialState, action: RouteActions): RouteS
     case RouteActionTypes.RoutesFailed:
       return {
         ...state,
-        isochrones: {
-          ...initialState.isochrones
-        },
+        isochrones: initialState.isochrones,
         isLoading: initialState.isLoading,
       };
     case RouteActionTypes.LoadRoutes:

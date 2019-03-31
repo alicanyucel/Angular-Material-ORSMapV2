@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from '../state';
 import { Store, select } from '@ngrx/store';
-import { LoadRoutes } from '../state/route/route.actions';
+import { LoadRoutes } from '../../state/route/route.actions';
 import { Observable } from 'rxjs';
-import { getIsLoading } from '../state/route/route.selectors';
+import { getIsLoading } from '../../state/route/route.selectors';
+import { AppState } from '../../state';
 
 @Component({
   selector: 'app-isochrone-ui',
   templateUrl: './isochrone-ui.component.html',
-  styleUrls: ['./isochrone-ui.component.css']
+  styleUrls: ['./isochrone-ui.component.scss']
 })
 export class IsochroneUiComponent implements OnInit {
 

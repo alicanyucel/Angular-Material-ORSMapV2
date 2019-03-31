@@ -1,0 +1,13 @@
+.settings-card {
+  margin: 10px;
+}
+
+.settings-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-card-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
