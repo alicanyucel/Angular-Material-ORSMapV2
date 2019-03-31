@@ -1,3 +1,5 @@
+/* tslint:disable:no-reference */
+/// <reference path="../../../types/Openrouteservice/index.d.ts"/>
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 
@@ -14,20 +16,19 @@ export class IsochroneUiComponent implements OnInit {
   }
 
   getResults() {
-    // @ts-ignore
     const isochrones = new Openrouteservice.Isochrones({
       api_key: environment.apiKey
     });
     isochrones.calculate({
+      range_type: 'time',
       locations: [[-83.4255176, 42.432238]], // these are in long/lat pairs, not lat/long pairs.
       location_type: 'start',
       profile: 'driving-car',
       range: 900, // time in seconds
-      interval: [300], // this number is used to split up the above number into regions
-      range_type: 'time'
+      interval: [300] // this number is used to split up the above number into regions
     })
       .then((response) => {
-        console.log('response', response);
+        console.log('service response', response);
       })
       .catch((err) => {
         console.log('An error occurred: ', err);
