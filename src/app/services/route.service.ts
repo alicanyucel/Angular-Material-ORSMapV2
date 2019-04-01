@@ -3,7 +3,7 @@ import { Observable, from } from 'rxjs';
 import { environment } from '../../environments/environment';
 import IsochroneResponse = Openrouteservice.IsochroneResponse;
 import Isochrones = Openrouteservice.Isochrones;
-import IsochroneSettings = Openrouteservice.IsochroneSettings;
+import IsochroneSettings = Openrouteservice.IsochroneQueryRequest;
 
 @Injectable({
   providedIn: 'root'

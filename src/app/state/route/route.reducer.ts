@@ -3,7 +3,7 @@ import { RouteActions, RouteActionTypes } from './route.actions';
 export interface RouteState {
   isLoading: boolean;
   isochrones: Openrouteservice.IsochroneResponse;
-  routeQuery: Openrouteservice.IsochroneSettings;
+  routeQuery: Openrouteservice.IsochroneQueryRequest;
 }
 
 export const initialState: RouteState = {

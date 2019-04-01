@@ -1,4 +1,5 @@
 /* tslint:disable */
+/// <reference path="../../node_modules/@types/geojson/index.d.ts"/>
 
 declare namespace Openrouteservice {
   type ProfileType = 'driving-car' | 'driving-hgv' | 'foot-walking' | 'foot-hiking' | 'cycling-regular' | 'cycling-road' | 'cycling-mountain' | 'cycling-electric' | 'wheelchair';
@@ -7,25 +8,9 @@ declare namespace Openrouteservice {
   type AttributeType = 'area' | 'reachfactor' | 'total_pop';
   type LocationType = 'start' | 'destination';
 
-  interface Geometry {
-    type: 'Polygon';
-    coordinates: number[][];
-  }
-
-  interface VersionInfo {
-    version: string;
-    build_date: string;
-  }
-
-  interface ConstructorOptions {
+  interface IsochroneConstructorOptions {
     api_key: string;
     host?: string;
-  }
-
-  interface GeoJsonFeature {
-    type: 'Feature';
-    properties: Record<string, any>;
-    geometry: Geometry;
   }
 
   interface IsochroneQueryBase {
@@ -35,7 +20,7 @@ declare namespace Openrouteservice {
     range_type: 'time' | 'distance';
   }
 
-  interface IsochroneSettings extends IsochroneQueryBase, Partial<ConstructorOptions> {
+  interface IsochroneQueryRequest extends IsochroneQueryBase {
     avoidables?: AvoidableType[];
     smoothing?: number;
     interval: number[];
@@ -46,28 +31,28 @@ declare namespace Openrouteservice {
     attributes?: AttributeType[];
   }
 
-  interface IsochroneQueryMeta extends IsochroneQueryBase {
+  interface IsochroneQueryResponse extends IsochroneQueryBase {
     ranges: string;
     attributes: string;
   }
 
-  interface ResponseMeta {
+  interface ResponseInfo {
     attribution: string;
-    engine: VersionInfo;
+    engine: {
+      version: string;
+      build_date: string;
+    };
     service: 'isochrones';
-    query: IsochroneQueryMeta;
+    query: IsochroneQueryResponse;
     timestamp: number;
   }
 
-  interface IsochroneResponse {
-    type: 'FeatureCollection';
-    bbox: [number, number, number, number];
-    features: GeoJsonFeature[];
-    info: ResponseMeta;
+  interface IsochroneResponse extends GeoJSON.FeatureCollection<GeoJSON.Polygon> {
+    info: ResponseInfo;
   }
 
   class Isochrones {
-    constructor(args: ConstructorOptions);
-    calculate: (settings: IsochroneSettings) => Promise<IsochroneResponse>;
+    constructor(args: IsochroneConstructorOptions);
+    calculate: (settings: IsochroneQueryRequest) => Promise<IsochroneResponse>;
   }
 }
