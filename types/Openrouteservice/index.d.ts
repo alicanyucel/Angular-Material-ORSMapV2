@@ -1,5 +1,4 @@
 /* tslint:disable */
-/// <reference path="../../node_modules/@types/geojson/index.d.ts"/>
 
 declare namespace Openrouteservice {
   type ProfileType = 'driving-car' | 'driving-hgv' | 'foot-walking' | 'foot-hiking' | 'cycling-regular' | 'cycling-road' | 'cycling-mountain' | 'cycling-electric' | 'wheelchair';
