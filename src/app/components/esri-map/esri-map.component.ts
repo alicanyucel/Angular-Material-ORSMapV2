@@ -14,8 +14,8 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class EsriMapComponent implements OnInit, OnDestroy {
 
-  private map: __esri.Map;
-  private mapView: __esri.MapView;
+  private map: import ('esri/Map');
+  private mapView: import ('esri/views/MapView');
   private componentDestroyed = new Subject<void>();
 
   constructor(private store$: Store<AppState>) { }

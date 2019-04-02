@@ -1,7 +1,7 @@
 export interface EsriModules {
-  Map: typeof __esri.Map;
-  MapView: typeof __esri.MapView;
-  GeoJsonLayer: typeof __esri.GeoJSONLayer;
+  Map: typeof import ('esri/Map');
+  MapView: typeof import ('esri/views/MapView');
+  GeoJsonLayer: typeof import ('esri/layers/GeoJSONLayer');
 }
 
 export const Esri: Partial<EsriModules> = {};
