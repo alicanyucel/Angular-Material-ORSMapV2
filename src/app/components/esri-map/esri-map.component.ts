@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../state';
 import { Store, select } from '@ngrx/store';
 import { getRouteData } from '../../state/route/route.selectors';
 import { filter } from 'rxjs/internal/operators/filter';
 import { Esri } from '../../shared/Esri';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-esri-map',
   templateUrl: './esri-map.component.html',
   styleUrls: ['./esri-map.component.scss']
 })
-export class EsriMapComponent implements OnInit {
+export class EsriMapComponent implements OnInit, OnDestroy {
 
   private map: __esri.Map;
   private mapView: __esri.MapView;
+  private componentDestroyed = new Subject<void>();
 
   constructor(private store$: Store<AppState>) { }
 
@@ -27,10 +30,17 @@ export class EsriMapComponent implements OnInit {
       zoom: 10,
       center: [-83.4255176, 42.432238]
     });
-    this.store$.pipe(
-      select(getRouteData),
-      filter(data => data != null)
-    ).subscribe(data => this.createGeoJsonLayer(data));
+    this.mapView.when(() => {
+      this.store$.pipe(
+        select(getRouteData),
+        filter(data => data != null),
+        takeUntil(this.componentDestroyed)
+      ).subscribe(data => this.createGeoJsonLayer(data));
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed.next();
   }
 
   createGeoJsonLayer(data: Openrouteservice.IsochroneResponse) {
