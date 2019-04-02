@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { AppComponent } from './components/app.component';
 import { StoreModule } from '@ngrx/store';
 import { metaReducers, reducers } from './state';
@@ -13,6 +13,11 @@ import { MaterialModule } from './shared/material.module';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { EsriMapComponent } from './components/esri-map/esri-map.component';
+import { EsriService } from './services/esri.service';
+
+export function initializer(esriService: EsriService) {
+  return () => esriService.initialize();
+}
 
 @NgModule({
   declarations: [
@@ -35,7 +40,9 @@ import { EsriMapComponent } from './components/esri-map/esri-map.component';
       logOnly: environment.production,
     }),
   ],
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: initializer, multi: true, deps: [EsriService] }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
