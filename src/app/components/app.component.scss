@@ -5,10 +5,11 @@
   height: 100%;
   min-height: 100%;
   position: fixed;
+  align-items: stretch;
 }
 
 .app-sidenav {
-  flex: 1;
+  width: 350px;
 }
 
 .app-content {
@@ -19,6 +20,14 @@
   justify-content: flex-start;
   align-items: stretch;
   align-content: flex-start;
+}
+
+.toolbar {
+  display: flex;
+}
+
+.title-spacer {
+  flex: 1 1 auto;
 }
 
 .map-container {

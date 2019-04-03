@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as esriLoader from 'esri-loader';
 import { Esri } from '../shared/Esri';
+import { select, Store } from '@ngrx/store';
+import { getRouteData } from '../state/route/route.selectors';
+import { filter, takeUntil } from 'rxjs/operators';
+import { AppState } from '../state';
+import { Subject } from 'rxjs';
 
 const modules = [
   'esri/Map',
@@ -13,9 +18,13 @@ const modules = [
 })
 export class EsriService {
 
-  constructor() { }
+  private map: import ('esri/Map');
+  private mapView: import ('esri/views/MapView');
+  private mapDestroyed = new Subject<void>();
 
-  initialize(): Promise<any> {
+  constructor(private store$: Store<AppState>) { }
+
+  initializeApi(): Promise<any> {
     const options = {
       version: '4.11',
       css: true,
@@ -37,4 +46,49 @@ export class EsriService {
       });
     });
   }
+
+  initializeMap(mapContainer: string, mapCenter: number[], mapZoom: number): void {
+    this.map = new Esri.Map({
+      basemap: 'streets'
+    });
+    this.mapView = new Esri.MapView({
+      container: mapContainer,
+      map: this.map,
+      zoom: mapZoom,
+      center: mapCenter
+    });
+    this.mapView.when(() => {
+      this.store$.pipe(
+        select(getRouteData),
+        filter(data => data != null),
+        takeUntil(this.mapDestroyed)
+      ).subscribe(data => this.createGeoJsonLayer(data));
+    });
+  }
+
+  tearDownMap(): void {
+    this.mapDestroyed.next();
+    this.mapView = null;
+    this.map = null;
+  }
+
+  clearLayers(): void {
+    const gjLayerIndex = this.map.allLayers.findIndex(l => l.id === 'drive-time-layer');
+    if (gjLayerIndex > -1) {
+      this.map.allLayers.removeAt(gjLayerIndex);
+    }
+  }
+
+  private createGeoJsonLayer(data: Openrouteservice.IsochroneResponse) {
+    this.clearLayers();
+    const blob = new Blob([JSON.stringify(data)]);
+    const url = URL.createObjectURL(blob);
+    const newLayer = new Esri.GeoJsonLayer({
+      url,
+      id: 'drive-time-layer'
+    });
+    this.map.add(newLayer);
+  }
+
+
 }

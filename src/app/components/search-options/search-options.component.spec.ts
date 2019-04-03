@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IsochroneUiComponent } from './isochrone-ui.component';
+import { SearchOptionsComponent } from './search-options.component';
 
 describe('IsochroneUiComponent', () => {
-  let component: IsochroneUiComponent;
-  let fixture: ComponentFixture<IsochroneUiComponent>;
+  let component: SearchOptionsComponent;
+  let fixture: ComponentFixture<SearchOptionsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IsochroneUiComponent ]
+      declarations: [ SearchOptionsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IsochroneUiComponent);
+    fixture = TestBed.createComponent(SearchOptionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

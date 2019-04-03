@@ -1,6 +1,7 @@
 /* tslint:disable:no-reference */
 /// <reference path="../../../types/index.d.ts"/>
 import { Component } from '@angular/core';
+import { EsriService } from '../services/esri.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Open-route-service Sample';
+
+  constructor(private esriService: EsriService) {}
+
+  onClear(): void {
+    this.esriService.clearLayers();
+  }
 }

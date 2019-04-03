@@ -1,11 +1,18 @@
 <mat-sidenav-container class="app-container">
+
   <mat-sidenav class="app-sidenav mat-elevation-z8" mode="side" opened>
-    <app-isochrone-ui></app-isochrone-ui>
+    <app-search-options></app-search-options>
   </mat-sidenav>
+
   <mat-sidenav-content class="app-content">
-    <mat-toolbar color="primary">
-      Drive Time Area
+    <mat-toolbar color="primary" class="toolbar">
+      <span>Drive Time Area</span>
+      <span class="title-spacer"></span>
+      <button mat-button (click)="onClear()">
+        <mat-icon>delete</mat-icon>
+      </button>
     </mat-toolbar>
     <app-esri-map class="map-container"></app-esri-map>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

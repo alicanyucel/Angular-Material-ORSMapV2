@@ -6,11 +6,11 @@ import { getIsLoading } from '../../state/route/route.selectors';
 import { AppState } from '../../state';
 
 @Component({
-  selector: 'app-isochrone-ui',
-  templateUrl: './isochrone-ui.component.html',
-  styleUrls: ['./isochrone-ui.component.scss']
+  selector: 'app-search-options',
+  templateUrl: './search-options.component.html',
+  styleUrls: ['./search-options.component.scss']
 })
-export class IsochroneUiComponent implements OnInit {
+export class SearchOptionsComponent implements OnInit {
 
   routeIsLoading$: Observable<boolean>;
 

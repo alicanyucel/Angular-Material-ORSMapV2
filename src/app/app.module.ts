@@ -4,7 +4,7 @@ import { AppComponent } from './components/app.component';
 import { StoreModule } from '@ngrx/store';
 import { metaReducers, reducers } from './state';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IsochroneUiComponent } from './components/isochrone-ui/isochrone-ui.component';
+import { SearchOptionsComponent } from './components/search-options/search-options.component';
 import { EffectsModule } from '@ngrx/effects';
 import { RouteEffects } from './state/route/route.effects';
 import { environment } from '../environments/environment';
@@ -16,13 +16,13 @@ import { EsriMapComponent } from './components/esri-map/esri-map.component';
 import { EsriService } from './services/esri.service';
 
 export function initializer(esriService: EsriService) {
-  return () => esriService.initialize();
+  return () => esriService.initializeApi();
 }
 
 @NgModule({
   declarations: [
     AppComponent,
-    IsochroneUiComponent,
+    SearchOptionsComponent,
     EsriMapComponent
   ],
   imports: [

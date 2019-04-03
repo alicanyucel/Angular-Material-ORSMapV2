@@ -6,6 +6,10 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="settings-card-content">
+    <mat-radio-group aria-label="Select an option" class="settings-profile">
+      <mat-radio-button class="profile-item" value="driving-car" checked>Drive Time</mat-radio-button>
+      <mat-radio-button class="profile-item" value="cycling-road">Cycle Time</mat-radio-button>
+    </mat-radio-group>
     <mat-form-field appearance="outline">
       <mat-label>Site Lat/Long</mat-label>
       <input matInput>
