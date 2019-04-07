@@ -10,7 +10,7 @@ import { RouteEffects } from './state/route/route.effects';
 import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MaterialModule } from './shared/material.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { EsriMapComponent } from './components/esri-map/esri-map.component';
 import { EsriService } from './services/esri.service';
@@ -29,6 +29,7 @@ export function initializer(esriService: EsriService) {
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
     StoreModule.forRoot(reducers, {metaReducers}),

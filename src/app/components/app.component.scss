@@ -20,13 +20,10 @@
 .toolbar {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  justify-items: start;
 }
 
-.toolbar-title {
-  justify-self: start;
-}
-
-.toolbar-menu {
+.toolbar>span:last-child {
   justify-self: end;
 }
 

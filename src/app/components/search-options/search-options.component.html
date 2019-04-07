@@ -6,15 +6,18 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="settings-card-content">
-    <mat-radio-group aria-label="Select an option" class="settings-profile">
-      <mat-radio-button class="profile-item" value="driving-car" checked>Drive Time</mat-radio-button>
-      <mat-radio-button class="profile-item" value="cycling-road">Cycle Time</mat-radio-button>
-    </mat-radio-group>
-    <mat-form-field appearance="outline">
-      <mat-label>Site Lat/Long</mat-label>
-      <input matInput>
-    </mat-form-field>
-    <mat-slider min="0" max="60" [thumbLabel]="true"></mat-slider>
+    <form novalidate [formGroup]="localForm">
+      <mat-radio-group aria-label="Select an option" class="settings-profile" formControlName="profile">
+        <mat-radio-button class="profile-item" value="driving-car" checked>Drive Time</mat-radio-button>
+        <mat-radio-button class="profile-item" value="cycling-road">Cycle Time</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field appearance="outline">
+        <mat-label>Site Lat/Long</mat-label>
+        <input matInput formControlName="location">
+      </mat-form-field>
+      <mat-slider #range min="0" max="3600" step="60" [thumbLabel]="true" [displayWith]="secondsToMinutes" formControlName="range"></mat-slider>
+      <mat-slider min="0" [max]="range.value" step="60" [thumbLabel]="true" [displayWith]="secondsToMinutes" formControlName="interval"></mat-slider>
+    </form>
   </mat-card-content>
   <mat-card-actions class="settings-card-actions">
     <button mat-raised-button color="primary" (click)="getResults()" [disabled]="routeIsLoading$ | async">Get Results</button>
