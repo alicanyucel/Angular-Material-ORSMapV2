@@ -12,8 +12,10 @@ export enum RouteActionTypes {
   LoadRoutes = '[Route] Load Routes',
   RoutesLoaded = '[Route] Routes Loaded',
   RoutesFailed = '[Route] Routes Failed',
+  ClearRoutes = '[Route] Clear Routes',
 
-  UpdateQuery = '[Route] Update Query'
+  UpdateQuery = '[Route] Update Query',
+  ToggleCaptureState = '[Route] Toggle Capture State'
 }
 
 export class LoadRoutes implements Action {
@@ -30,14 +32,24 @@ export class RoutesFailed implements Action {
     constructor(public payload: { err: any }) {}
 }
 
+export class ClearRoutes implements Action {
+    readonly type = RouteActionTypes.ClearRoutes;
+}
+
 export class UpdateQuery implements Action {
     readonly type = RouteActionTypes.UpdateQuery;
     constructor(public payload: { changes: RouteQueryChanges }) {}
+}
+
+export class ToggleCaptureState implements Action {
+    readonly type = RouteActionTypes.ToggleCaptureState;
 }
 
 export type RouteActions =
   LoadRoutes |
   RoutesLoaded |
   RoutesFailed |
-  UpdateQuery
+  ClearRoutes |
+  UpdateQuery |
+  ToggleCaptureState
   ;

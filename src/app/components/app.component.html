@@ -5,14 +5,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="app-content">
-    <mat-toolbar color="primary" class="toolbar">
-      <span>Drive Time Area</span>
-      <span>
-        <button mat-button (click)="onClear()">
-        <mat-icon>delete</mat-icon>
-      </button>
-      </span>
-    </mat-toolbar>
+    <app-header-toolbar></app-header-toolbar>
     <app-esri-map class="map-container"></app-esri-map>
   </mat-sidenav-content>
 

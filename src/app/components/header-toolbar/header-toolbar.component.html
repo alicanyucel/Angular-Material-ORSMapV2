@@ -1,0 +1,11 @@
+<mat-toolbar color="primary" class="toolbar-container">
+  <span>Drive Time Area</span>
+  <span class="button-container">
+    <button mat-flat-button (click)="onBookmark()" [color]="(captureState$ | async) ? 'accent' : 'primary'">
+      <mat-icon>bookmark</mat-icon>
+    </button>
+    <button mat-button (click)="onClear()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </span>
+</mat-toolbar>

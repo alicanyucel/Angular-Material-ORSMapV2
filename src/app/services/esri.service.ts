@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import * as esriLoader from 'esri-loader';
 import { Esri } from '../shared/Esri';
 import { select, Store } from '@ngrx/store';
-import { getRouteData } from '../state/route/route.selectors';
-import { filter, takeUntil } from 'rxjs/operators';
+import { getCaptureState, getRouteData } from '../state/route/route.selectors';
+import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../state';
 import { Subject } from 'rxjs';
 
@@ -71,9 +71,12 @@ export class EsriService {
 
       this.store$.pipe(
         select(getRouteData),
-        filter(data => data != null),
         takeUntil(this.mapDestroyed)
       ).subscribe(data => this.createGeoJsonLayer(data));
+      this.store$.pipe(
+        select(getCaptureState),
+        takeUntil(this.mapDestroyed)
+      ).subscribe(state => ccWidget.mode = (state ? 'capture' : 'live'));
     });
   }
 
@@ -83,12 +86,9 @@ export class EsriService {
     this.map = null;
   }
 
-  clearLayers(): void {
+  private createGeoJsonLayer(data: Openrouteservice.IsochroneResponse): void {
     this.map.layers.removeAll();
-  }
-
-  private createGeoJsonLayer(data: Openrouteservice.IsochroneResponse) {
-    this.clearLayers();
+    if (data == null) return;
     const blob = new Blob([JSON.stringify(data)]);
     const url = URL.createObjectURL(blob);
     const newLayer = new Esri.GeoJsonLayer({

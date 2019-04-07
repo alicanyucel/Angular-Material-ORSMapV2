@@ -17,16 +17,6 @@
   flex-flow: column nowrap;
 }
 
-.toolbar {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-items: start;
-}
-
-.toolbar>span:last-child {
-  justify-self: end;
-}
-
 .map-container {
   padding: 5px;
   flex: 1;

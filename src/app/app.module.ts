@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { EsriMapComponent } from './components/esri-map/esri-map.component';
 import { EsriService } from './services/esri.service';
+import { HeaderToolbarComponent } from './components/header-toolbar/header-toolbar.component';
 
 export function initializer(esriService: EsriService) {
   return () => esriService.initializeApi();
@@ -23,7 +24,8 @@ export function initializer(esriService: EsriService) {
   declarations: [
     AppComponent,
     SearchOptionsComponent,
-    EsriMapComponent
+    EsriMapComponent,
+    HeaderToolbarComponent
   ],
   imports: [
     BrowserModule,

@@ -2,12 +2,14 @@ import { RouteActions, RouteActionTypes } from './route.actions';
 
 export interface RouteState {
   isLoading: boolean;
+  captureMode: boolean;
   isochrones: Openrouteservice.IsochroneResponse;
   routeQuery: Openrouteservice.IsochroneQueryRequest;
 }
 
 export const initialState: RouteState = {
   isLoading: false,
+  captureMode: false,
   isochrones: null,
   routeQuery: {
     range_type: 'time',
@@ -22,13 +24,10 @@ export const initialState: RouteState = {
 
 export function routeReducer(state = initialState, action: RouteActions): RouteState {
   switch (action.type) {
-    case RouteActionTypes.UpdateQuery:
+    case RouteActionTypes.LoadRoutes:
       return {
         ...state,
-        routeQuery: {
-          ...state.routeQuery,
-          ...action.payload.changes
-        }
+        isLoading: true
       };
     case RouteActionTypes.RoutesLoaded:
       return {
@@ -44,10 +43,23 @@ export function routeReducer(state = initialState, action: RouteActions): RouteS
         isochrones: initialState.isochrones,
         isLoading: initialState.isLoading,
       };
-    case RouteActionTypes.LoadRoutes:
+    case RouteActionTypes.ClearRoutes:
       return {
         ...state,
-        isLoading: true
+        isochrones: initialState.isochrones
+      };
+    case RouteActionTypes.UpdateQuery:
+      return {
+        ...state,
+        routeQuery: {
+          ...state.routeQuery,
+          ...action.payload.changes
+        }
+      };
+    case RouteActionTypes.ToggleCaptureState:
+      return {
+        ...state,
+        captureMode: !state.captureMode
       };
     default:
       return state;
