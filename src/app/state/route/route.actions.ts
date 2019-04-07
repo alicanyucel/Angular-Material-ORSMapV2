@@ -1,9 +1,19 @@
 import { Action } from '@ngrx/store';
+import ProfileType = Openrouteservice.ProfileType;
+
+export interface RouteQueryChanges {
+  locations: number[][];
+  profile: ProfileType;
+  range: number;
+  interval: number[];
+}
 
 export enum RouteActionTypes {
   LoadRoutes = '[Route] Load Routes',
   RoutesLoaded = '[Route] Routes Loaded',
-  RoutesFailed = '[Route] Routes Failed'
+  RoutesFailed = '[Route] Routes Failed',
+
+  UpdateQuery = '[Route] Update Query'
 }
 
 export class LoadRoutes implements Action {
@@ -20,8 +30,14 @@ export class RoutesFailed implements Action {
     constructor(public payload: { err: any }) {}
 }
 
+export class UpdateQuery implements Action {
+    readonly type = RouteActionTypes.UpdateQuery;
+    constructor(public payload: { changes: RouteQueryChanges }) {}
+}
+
 export type RouteActions =
   LoadRoutes |
   RoutesLoaded |
-  RoutesFailed
+  RoutesFailed |
+  UpdateQuery
   ;

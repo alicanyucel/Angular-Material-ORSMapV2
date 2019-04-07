@@ -22,6 +22,14 @@ export const initialState: RouteState = {
 
 export function routeReducer(state = initialState, action: RouteActions): RouteState {
   switch (action.type) {
+    case RouteActionTypes.UpdateQuery:
+      return {
+        ...state,
+        routeQuery: {
+          ...state.routeQuery,
+          ...action.payload.changes
+        }
+      };
     case RouteActionTypes.RoutesLoaded:
       return {
         ...state,

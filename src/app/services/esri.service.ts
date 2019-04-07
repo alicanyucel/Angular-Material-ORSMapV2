@@ -10,7 +10,8 @@ import { Subject } from 'rxjs';
 const modules = [
   'esri/Map',
   'esri/views/MapView',
-  'esri/layers/GeoJSONLayer'
+  'esri/layers/GeoJSONLayer',
+  'esri/widgets/CoordinateConversion'
 ];
 
 @Injectable({
@@ -35,6 +36,7 @@ export class EsriService {
           Esri.Map = m[0];
           Esri.MapView = m[1];
           Esri.GeoJsonLayer = m[2];
+          Esri.CoordinateConversion = m[3];
           resolve();
         }).catch(e => {
           console.error('There was an error loading the individual Esri modules: ', e);
@@ -58,6 +60,15 @@ export class EsriService {
       center: mapCenter
     });
     this.mapView.when(() => {
+      const ccWidget = new Esri.CoordinateConversion({
+        view: this.mapView
+      });
+      const xyFormat = ccWidget.formats.find(f => f.name === 'xy');
+      if (xyFormat != null) {
+        xyFormat.currentPattern = 'Y, X';
+      }
+      this.mapView.ui.add(ccWidget, 'top-right');
+
       this.store$.pipe(
         select(getRouteData),
         filter(data => data != null),
@@ -73,10 +84,7 @@ export class EsriService {
   }
 
   clearLayers(): void {
-    const gjLayerIndex = this.map.allLayers.findIndex(l => l.id === 'drive-time-layer');
-    if (gjLayerIndex > -1) {
-      this.map.allLayers.removeAt(gjLayerIndex);
-    }
+    this.map.layers.removeAll();
   }
 
   private createGeoJsonLayer(data: Openrouteservice.IsochroneResponse) {
@@ -85,10 +93,9 @@ export class EsriService {
     const url = URL.createObjectURL(blob);
     const newLayer = new Esri.GeoJsonLayer({
       url,
-      id: 'drive-time-layer'
+      title: 'drive-time-layer',
+      copyright: data.info.attribution
     });
     this.map.add(newLayer);
   }
-
-
 }
