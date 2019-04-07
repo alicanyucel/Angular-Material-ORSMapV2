@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { LoadRoutes } from '../../state/route/route.actions';
 import { Observable } from 'rxjs';
-import { getIsLoading } from '../../state/route/route.selectors';
+import { getIsLoading, getRouteQuery } from '../../state/route/route.selectors';
 import { AppState } from '../../state';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, withLatestFrom } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-options',
@@ -21,16 +21,24 @@ export class SearchOptionsComponent implements OnInit {
               private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.routeIsLoading$ = this.store$.pipe(select(getIsLoading));
     this.setupForm();
+    this.routeIsLoading$ = this.store$.pipe(select(getIsLoading));
+    this.store$.pipe(select(getRouteQuery)).subscribe(data => {
+      this.localForm.setValue({
+        profile: data.profile,
+        location: data.locations[0].join(','),
+        range: data.range,
+        interval: data.interval[0]
+      }, { emitEvent: false });
+    });
   }
 
   private setupForm(): void {
     this.localForm = this.fb.group({
-      profile: 'driving-car',
+      profile: null,
       location: null,
-      range: 900,
-      interval: 300
+      range: null,
+      interval: null
     });
 
     // If the range drops below the current interval, reset interval to 0
