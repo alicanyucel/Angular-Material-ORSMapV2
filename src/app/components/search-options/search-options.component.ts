@@ -1,11 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { LoadRoutes, UpdateQuery } from '../../state/route/route.actions';
-import { Observable, Subject } from 'rxjs';
-import { getIsLoading, getRouteQuery } from '../../state/route/route.selectors';
-import { AppState } from '../../state';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, map, takeUntil } from 'rxjs/operators';
+import { AppState } from '../../state';
+import { LoadRoutes, RouteQueryChanges, UpdateQuery } from '../../state/route/route.actions';
+import { getIsLoading, getRouteQuery } from '../../state/route/route.selectors';
+
+interface FormData {
+  profile: Openrouteservice.ProfileType;
+  location: string;
+  range: number;
+  interval: number;
+}
 
 @Component({
   selector: 'app-search-options',
@@ -23,19 +30,32 @@ export class SearchOptionsComponent implements OnInit, OnDestroy {
   constructor(private store$: Store<AppState>,
               private fb: FormBuilder) { }
 
-  static locationToDisplay(yxPair: number[]): string {
-    if (yxPair.length !== 2) {
-      return '';
+  static queryToForm(query: Openrouteservice.IsochroneQueryRequest): FormData {
+    let locationValue = '';
+    if (query.locations[0].length === 2) {
+      locationValue = [query.locations[0][1], query.locations[0][0]].join(', ');
     }
-    return [yxPair[1], yxPair[0]].join(', ');
+    return {
+      profile: query.profile,
+      location: locationValue,
+      range: query.range,
+      interval: query.interval[0]
+    };
   }
 
-  static displayToLocation(xyPair: string): number[] {
-    const pair = xyPair.split(',');
-    if (pair.length !== 2) {
-      return [];
+  static formToQuery(formValues: FormData): RouteQueryChanges {
+    const pair = formValues.location.split(',');
+    let locationQuery: number[] = [];
+    if (pair.length === 2) {
+      locationQuery = [Number(pair[1].trim()), Number(pair[0].trim())];
     }
-    return [Number(pair[1].trim()), Number(pair[0].trim())];
+    const intervalValue = Math.min(formValues.interval, formValues.range);
+    return {
+      profile: formValues.profile,
+      range: formValues.range,
+      interval: [intervalValue],
+      locations: [locationQuery]
+    };
   }
 
   ngOnInit() {
@@ -56,46 +76,28 @@ export class SearchOptionsComponent implements OnInit, OnDestroy {
       interval: null
     });
 
-    // If the range drops below the current interval, reset interval to 0
-    this.localForm.get('range').valueChanges.pipe(
-      debounceTime(250),
+    this.routeIsLoading$.pipe(
       takeUntil(this.componentIsDestroyed$)
-    ).subscribe(newValue => {
-      if (newValue < this.localForm.get('interval').value) {
-        this.localForm.get('interval').setValue(0);
-      }
-    });
+    ).subscribe(isLoading => this.setFormDisabled(isLoading));
 
     this.localForm.valueChanges.pipe(
       debounceTime(500),
+      map(newValues => SearchOptionsComponent.formToQuery(newValues)),
       takeUntil(this.componentIsDestroyed$)
-    ).subscribe(newValues => this.store$.dispatch(new UpdateQuery({ changes: {
-        interval: [newValues.interval],
-        profile: newValues.profile,
-        range: newValues.range,
-        locations: [SearchOptionsComponent.displayToLocation(newValues.location)]
-    }})));
-
-    this.routeIsLoading$.pipe(
-      takeUntil(this.componentIsDestroyed$)
-    ).subscribe(isLoading => {
-      if (isLoading) {
-        this.localForm.disable({ emitEvent: false });
-      } else {
-        this.localForm.enable({ emitEvent: false });
-      }
-    });
+    ).subscribe(changes => this.store$.dispatch(new UpdateQuery({ changes })));
 
     this.routeQuery$.pipe(
+      map(newQuery => SearchOptionsComponent.queryToForm(newQuery)),
       takeUntil(this.componentIsDestroyed$)
-    ).subscribe(data => {
-      this.localForm.setValue({
-        profile: data.profile,
-        location: SearchOptionsComponent.locationToDisplay(data.locations[0]),
-        range: data.range,
-        interval: data.interval[0]
-      }, { emitEvent: false });
-    });
+    ).subscribe(values => this.localForm.setValue(values, { emitEvent: false }));
+  }
+
+  private setFormDisabled(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.localForm.disable({ emitEvent: false });
+    } else {
+      this.localForm.enable({ emitEvent: false });
+    }
   }
 
   getResults() {
@@ -103,10 +105,6 @@ export class SearchOptionsComponent implements OnInit, OnDestroy {
   }
 
   secondsToMinutes(value: number | null): number {
-    if (value == null) {
-      return 0;
-    } else {
-      return value / 60;
-    }
+    return (value || 0) / 60;
   }
 }

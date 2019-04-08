@@ -63,16 +63,15 @@ export class EsriService {
       const ccWidget = new Esri.CoordinateConversion({
         view: this.mapView
       });
-      const xyFormat = ccWidget.formats.find(f => f.name === 'xy');
-      if (xyFormat != null) {
-        xyFormat.currentPattern = 'Y, X';
-      }
+      // change the pattern to strip off the degrees symbol, and match what the search ui expects
+      ccWidget.formats.find(f => f.name === 'xy').currentPattern = 'Y, X';
       this.mapView.ui.add(ccWidget, 'top-right');
 
       this.store$.pipe(
         select(getRouteData),
         takeUntil(this.mapDestroyed)
       ).subscribe(data => this.createGeoJsonLayer(data));
+
       this.store$.pipe(
         select(getCaptureState),
         takeUntil(this.mapDestroyed)
