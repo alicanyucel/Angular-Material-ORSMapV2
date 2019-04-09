@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as esriLoader from 'esri-loader';
 import { Esri } from '../shared/Esri';
 import { select, Store } from '@ngrx/store';
+import { ShowSimpleMessage, UpdateQuery } from '../state/route/route.actions';
 import { getCaptureState, getRouteData } from '../state/route/route.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../state';
@@ -66,6 +67,15 @@ export class EsriService {
       // change the pattern to strip off the degrees symbol, and match what the search ui expects
       ccWidget.formats.find(f => f.name === 'xy').currentPattern = 'Y, X';
       this.mapView.ui.add(ccWidget, 'top-right');
+
+      this.mapView.on('click', (e) => {
+        if (e.button === 2) {
+          const x = Number(e.mapPoint.longitude.toFixed(6));
+          const y = Number(e.mapPoint.latitude.toFixed(6));
+          this.store$.dispatch(new UpdateQuery({ changes: { locations: [[x, y]] } }));
+          this.store$.dispatch(new ShowSimpleMessage({ message: 'Site coordinates updated.'}));
+        }
+      });
 
       this.store$.pipe(
         select(getRouteData),

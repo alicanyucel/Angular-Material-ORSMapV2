@@ -15,7 +15,9 @@ export enum RouteActionTypes {
   ClearRoutes = '[Route] Clear Routes',
 
   UpdateQuery = '[Route] Update Query',
-  ToggleCaptureState = '[Route] Toggle Capture State'
+  ToggleCaptureState = '[Route] Toggle Capture State',
+
+  ShowSimpleMessage = '[Route] Show Simple Message',
 }
 
 export class LoadRoutes implements Action {
@@ -38,11 +40,16 @@ export class ClearRoutes implements Action {
 
 export class UpdateQuery implements Action {
     readonly type = RouteActionTypes.UpdateQuery;
-    constructor(public payload: { changes: RouteQueryChanges }) {}
+    constructor(public payload: { changes: Partial<RouteQueryChanges> }) {}
 }
 
 export class ToggleCaptureState implements Action {
     readonly type = RouteActionTypes.ToggleCaptureState;
+}
+
+export class ShowSimpleMessage implements Action {
+    readonly type = RouteActionTypes.ShowSimpleMessage;
+    constructor(public payload: { message: string }) {}
 }
 
 export type RouteActions =
@@ -51,5 +58,6 @@ export type RouteActions =
   RoutesFailed |
   ClearRoutes |
   UpdateQuery |
-  ToggleCaptureState
+  ToggleCaptureState |
+  ShowSimpleMessage
   ;

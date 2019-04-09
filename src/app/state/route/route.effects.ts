@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { RouteActionTypes, RouteActions, RoutesLoaded, RoutesFailed } from './route.actions';
+import { RouteActionTypes, RouteActions, RoutesLoaded, RoutesFailed, ShowSimpleMessage } from './route.actions';
 import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { RouteService } from '../../services/route.service';
 import { select, Store } from '@ngrx/store';
@@ -23,18 +23,23 @@ export class RouteEffects {
     ))
   );
 
-  @Effect({ dispatch: false })
+  @Effect()
   routesSucceeded$ = this.actions$.pipe(
     ofType(RouteActionTypes.RoutesLoaded),
-    tap(() => console.log('Routes successfully loaded. (See redux devtools for more details)')),
-    tap(() => this.messaging.showMessage('Routes loaded Successfully'))
+    map(() => new ShowSimpleMessage({ message: 'Routes loaded Successfully' }))
   );
 
-  @Effect({ dispatch: false })
+  @Effect()
   routesFailed$ = this.actions$.pipe(
     ofType(RouteActionTypes.RoutesFailed),
     tap(action => console.error('There was an error requesting the route.', action.payload.err)),
-    tap(() => this.messaging.showMessage('Routing failed!'))
+    map(() => new ShowSimpleMessage({ message: 'Routing failed!' }))
+  );
+
+  @Effect({ dispatch: false })
+  showMessage$ = this.actions$.pipe(
+    ofType(RouteActionTypes.ShowSimpleMessage),
+    tap(action => this.messaging.showMessage(action.payload.message))
   );
 
   constructor(private actions$: Actions<RouteActions>,
