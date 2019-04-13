@@ -15,12 +15,14 @@ const modules = [
   'esri/widgets/CoordinateConversion'
 ];
 
+type esriMap = import ('esri/Map');
+
 @Injectable({
   providedIn: 'root'
 })
 export class EsriService {
 
-  private map: import ('esri/Map');
+  private map: esriMap;
   private mapView: import ('esri/views/MapView');
   private mapDestroyed = new Subject<void>();
 
@@ -67,7 +69,6 @@ export class EsriService {
       // change the pattern to strip off the degrees symbol, and match what the search ui expects
       ccWidget.formats.find(f => f.name === 'xy').currentPattern = 'Y, X';
       this.mapView.ui.add(ccWidget, 'top-right');
-
       this.mapView.on('click', (e) => {
         if (e.button === 2) {
           const x = Number(e.mapPoint.longitude.toFixed(6));
