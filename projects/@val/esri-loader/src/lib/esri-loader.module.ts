@@ -1,10 +1,10 @@
 /* tslint:disable:only-arrow-functions */
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { bootstrapper } from './esri-surface';
+import { __bootstrapper } from './esri-surface';
 
 export function init() {
   return function() {
-    return bootstrapper.init();
+    return __bootstrapper.init();
   };
 }
 

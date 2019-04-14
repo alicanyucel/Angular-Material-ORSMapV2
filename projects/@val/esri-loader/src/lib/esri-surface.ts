@@ -1,7 +1,8 @@
 /* tslint:disable:only-arrow-functions */
 import * as esriLoader from 'esri-loader';
 
-export const bootstrapper = {
+// tslint:disable-next-line:variable-name
+export const __bootstrapper = {
   options: {
     version: '4.11',
     css: true
@@ -14,9 +15,9 @@ export const bootstrapper = {
   ],
   async init() {
     try {
-      await esriLoader.loadScript(bootstrapper.options);
-      const asyncModules = await esriLoader.loadModules(bootstrapper.modules);
-      bootstrapper.load(asyncModules);
+      await esriLoader.loadScript(__bootstrapper.options);
+      const asyncModules = await esriLoader.loadModules(__bootstrapper.modules);
+      __bootstrapper.load(asyncModules);
     } catch (e) {
       console.error('There was an error during the Esri Api bootstrapping process', e);
     }
