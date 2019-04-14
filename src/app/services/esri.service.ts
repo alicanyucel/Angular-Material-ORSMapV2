@@ -1,69 +1,35 @@
 import { Injectable } from '@angular/core';
-import * as esriLoader from 'esri-loader';
-import { Esri } from '../shared/Esri';
 import { select, Store } from '@ngrx/store';
 import { ShowSimpleMessage, UpdateQuery } from '../state/route/route.actions';
 import { getCaptureState, getRouteData } from '../state/route/route.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../state';
 import { Subject } from 'rxjs';
-
-const modules = [
-  'esri/Map',
-  'esri/views/MapView',
-  'esri/layers/GeoJSONLayer',
-  'esri/widgets/CoordinateConversion'
-];
-
-type esriMap = import ('esri/Map');
+import * as esri from '@val/esri-loader';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EsriService {
 
-  private map: esriMap;
-  private mapView: import ('esri/views/MapView');
+  private map: esri.Map;
+  private mapView: esri.MapView;
   private mapDestroyed = new Subject<void>();
 
   constructor(private store$: Store<AppState>) { }
 
-  initializeApi(): Promise<any> {
-    const options = {
-      version: '4.11',
-      css: true,
-    };
-    return new Promise<any>((resolve, reject) => {
-      esriLoader.loadScript(options).then(() => {
-        esriLoader.loadModules(modules).then(m => {
-          Esri.Map = m[0];
-          Esri.MapView = m[1];
-          Esri.GeoJsonLayer = m[2];
-          Esri.CoordinateConversion = m[3];
-          resolve();
-        }).catch(e => {
-          console.error('There was an error loading the individual Esri modules: ', e);
-          reject(e);
-        });
-      }).catch(e => {
-        console.error('There was an error loading the main Esri script: ', e);
-        reject(e);
-      });
-    });
-  }
-
   initializeMap(mapContainer: string, mapCenter: number[], mapZoom: number): void {
-    this.map = new Esri.Map({
+    this.map = new esri.Map({
       basemap: 'streets'
     });
-    this.mapView = new Esri.MapView({
+    this.mapView = new esri.MapView({
       container: mapContainer,
       map: this.map,
       zoom: mapZoom,
       center: mapCenter
     });
     this.mapView.when(() => {
-      const ccWidget = new Esri.CoordinateConversion({
+      const ccWidget = new esri.CoordinateConversion({
         view: this.mapView
       });
       // change the pattern to strip off the degrees symbol, and match what the search ui expects
@@ -101,7 +67,7 @@ export class EsriService {
     if (data == null) return;
     const blob = new Blob([JSON.stringify(data)]);
     const url = URL.createObjectURL(blob);
-    const newLayer = new Esri.GeoJsonLayer({
+    const newLayer = new esri.GeoJsonLayer({
       url,
       title: 'drive-time-layer',
       copyright: data.info.attribution

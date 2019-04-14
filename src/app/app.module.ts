@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { EsriLoaderModule } from '@val/esri-loader';
 import { AppComponent } from './components/app.component';
 import { StoreModule } from '@ngrx/store';
 import { metaReducers, reducers } from './state';
@@ -13,12 +14,7 @@ import { MaterialModule } from './shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { EsriMapComponent } from './components/esri-map/esri-map.component';
-import { EsriService } from './services/esri.service';
 import { HeaderToolbarComponent } from './components/header-toolbar/header-toolbar.component';
-
-export function initializer(esriService: EsriService) {
-  return () => esriService.initializeApi();
-}
 
 @NgModule({
   declarations: [
@@ -34,6 +30,7 @@ export function initializer(esriService: EsriService) {
     ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
+    EsriLoaderModule,
     StoreModule.forRoot(reducers, {metaReducers}),
     EffectsModule.forRoot([
       RouteEffects
@@ -42,9 +39,6 @@ export function initializer(esriService: EsriService) {
       name: 'OpenRouteService Application',
       logOnly: environment.production,
     }),
-  ],
-  providers: [
-    { provide: APP_INITIALIZER, useFactory: initializer, multi: true, deps: [EsriService] }
   ],
   bootstrap: [AppComponent]
 })

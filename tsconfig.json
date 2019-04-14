@@ -15,6 +15,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@val/esri-loader": [
+        "dist/@val/esri-loader"
+      ],
+      "@val/esri-loader/*": [
+        "dist/@val/esri-loader/*"
+      ]
+    }
   }
 }
