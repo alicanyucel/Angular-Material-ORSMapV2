@@ -26,7 +26,7 @@ declare namespace Openrouteservice {
     smoothing?: number;
     interval: number[];
     format?: 'geojson';
-    range: number;
+    range: number[];
     units?: UnitType;
     area_units?: UnitType;
     attributes?: AttributeType[];

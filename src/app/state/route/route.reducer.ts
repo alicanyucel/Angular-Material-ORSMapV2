@@ -16,7 +16,7 @@ export const initialState: RouteState = {
     locations: [[-83.4255176, 42.432238]], // these are in long/lat pairs, not lat/long pairs.
     location_type: 'start',
     profile: 'driving-car',
-    range: 900, // time in seconds
+    range: [900], // time in seconds
     interval: [300], // this number is used to split up the above number into regions
     attributes: ['area', 'total_pop']
   }

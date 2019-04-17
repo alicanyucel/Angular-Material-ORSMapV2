@@ -4,7 +4,7 @@ import ProfileType = Openrouteservice.ProfileType;
 export interface RouteQueryChanges {
   locations: number[][];
   profile: ProfileType;
-  range: number;
+  range: number[];
   interval: number[];
 }
 

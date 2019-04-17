@@ -38,7 +38,7 @@ export class SearchOptionsComponent implements OnInit, OnDestroy {
     return {
       profile: query.profile,
       location: locationValue,
-      range: query.range,
+      range: query.range[0],
       interval: query.interval[0]
     };
   }
@@ -52,7 +52,7 @@ export class SearchOptionsComponent implements OnInit, OnDestroy {
     const intervalValue = Math.min(formValues.interval, formValues.range);
     return {
       profile: formValues.profile,
-      range: formValues.range,
+      range: [formValues.range],
       interval: [intervalValue],
       locations: [locationQuery]
     };
