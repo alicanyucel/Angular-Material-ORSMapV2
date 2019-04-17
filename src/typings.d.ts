@@ -1,4 +1,5 @@
 /* tslint:disable */
+///<reference path="../node_modules/@types/geojson/index.d.ts"/>
 
 declare namespace Openrouteservice {
   type ProfileType = 'driving-car' | 'driving-hgv' | 'foot-walking' | 'foot-hiking' | 'cycling-regular' | 'cycling-road' | 'cycling-mountain' | 'cycling-electric' | 'wheelchair';
@@ -8,11 +9,12 @@ declare namespace Openrouteservice {
   type LocationType = 'start' | 'destination';
 
   interface IsochroneConstructorOptions {
-    api_key: string;
+    api_key?: string;
     host?: string;
+    api_version?: string;
   }
 
-  interface IsochroneQueryBase {
+  interface IsochroneQueryBase extends IsochroneConstructorOptions {
     locations: number[][];
     location_type: LocationType;
     profile: ProfileType;

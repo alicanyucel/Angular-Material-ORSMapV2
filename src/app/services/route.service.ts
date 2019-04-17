@@ -16,6 +16,9 @@ export class RouteService {
     const isochrones = new Isochrones({
       api_key: environment.apiKey
     });
+    settings.api_key = '.';
+    settings.api_version = 'v2';
+    settings.host = 'https://impowerdev.val.vlss.local/ors';
     const result: Promise<IsochroneResponse> = isochrones.calculate(settings);
     return from(result);
   }
